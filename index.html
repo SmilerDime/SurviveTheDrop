@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survive the Drop — Championship to Premier League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pitch:#0C3B23;--pitch-stripe:#114A2C;--chalk:#F4F2E7;--chalk-dim:rgba(244,242,231,.55);
+  --amber:#FFB400;--red:#D0212F;--card:#0A2A19;--card-edge:rgba(244,242,231,.14);
+  --display:'Oswald','Arial Narrow',system-ui,sans-serif;--mono:'IBM Plex Mono','Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--mono);color:var(--chalk);
+  background:repeating-linear-gradient(90deg,var(--pitch) 0 90px,var(--pitch-stripe) 90px 180px);min-height:100dvh;}
+.frame{min-height:100dvh;border:3px solid var(--chalk-dim);outline:1px solid rgba(244,242,231,.12);
+  outline-offset:-12px;padding:20px clamp(12px,4vw,48px) 64px;max-width:1100px;margin:0 auto;position:relative;}
+header.top{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--chalk-dim);
+  padding-bottom:10px;margin-bottom:22px;gap:12px;flex-wrap:wrap;}
+.wordmark{font-family:var(--display);font-weight:700;font-size:clamp(20px,4vw,30px);letter-spacing:.04em;text-transform:uppercase}
+.wordmark em{font-style:normal;color:var(--amber)}
+.headright{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.tagline{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk-dim)}
+.screen{display:none}
+.screen.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero h1{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.95;
+  font-size:clamp(34px,7.5vw,72px);letter-spacing:.01em;margin:18px 0 10px}
+.hero h1 .drop{color:var(--red);-webkit-text-stroke:1px var(--chalk);text-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.hero p.lede{max-width:64ch;font-size:14px;line-height:1.65}
+.hero p.lede b{color:var(--amber);font-weight:600}
+.rules{margin:18px 0 26px;font-size:12.5px;line-height:1.7;color:var(--chalk-dim);max-width:66ch}
+.rules span{color:var(--amber)}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:8px}
+.mode-card{background:var(--card);border:2px solid var(--card-edge);padding:18px 16px 16px;cursor:pointer;
+  text-align:left;color:var(--chalk);font-family:var(--mono);transition:transform .12s ease,border-color .12s ease;}
+.mode-card:hover,.mode-card:focus-visible{transform:translateY(-3px);border-color:var(--amber);outline:none}
+.mode-card .kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+.mode-card h2{font-family:var(--display);text-transform:uppercase;font-size:22px;margin:6px 0 8px;letter-spacing:.03em}
+.mode-card p{font-size:12px;line-height:1.6;color:var(--chalk-dim)}
+.mode-card .bonus{margin-top:10px;font-size:11px;color:var(--amber)}
+.resume{margin-top:18px}
+.draftbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.roundpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-dim)}
+.roundpill b{color:var(--amber);font-size:13px}
+button.btn{font-family:var(--mono);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--amber);color:#1a1405;border:none;padding:10px 16px;cursor:pointer;}
+button.btn:hover{filter:brightness(1.08)}
+button.btn:disabled{background:#3a4a3f;color:rgba(244,242,231,.4);cursor:not-allowed;filter:none}
+button.btn.ghost{background:transparent;color:var(--chalk);border:1.5px solid var(--card-edge)}
+button.btn.ghost:hover:not(:disabled){border-color:var(--amber);color:var(--amber)}
+button.btn.ghost:disabled{background:transparent;border-color:var(--card-edge)}
+.board{background:#08130C;border:2px solid var(--card-edge);padding:16px;display:flex;flex-direction:column;gap:8px;
+  margin-bottom:18px;box-shadow:0 8px 0 rgba(0,0,0,.25);}
+.board .label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--chalk-dim);display:flex;justify-content:space-between}
+.flipline{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.flip{font-family:var(--display);font-weight:600;text-transform:uppercase;font-size:clamp(18px,4.2vw,32px);line-height:1;
+  background:#101D14;border:1px solid rgba(255,255,255,.07);padding:8px 9px;min-width:1.1em;text-align:center;
+  border-bottom:3px solid rgba(0,0,0,.5);}
+.flip.season{color:var(--amber)}
+.flip.spin{animation:flick .08s linear infinite}
+@keyframes flick{0%{transform:translateY(0)}50%{transform:translateY(-2px)}100%{transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.flip.spin{animation:none;opacity:.6}.screen.on{animation:none}}
+.duty{font-size:12px;color:var(--chalk-dim);margin:0 0 10px;line-height:1.6}
+.duty b{color:var(--chalk)}
+.cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:26px}
+.pcard{background:var(--card);border:1.5px solid var(--card-edge);padding:12px;display:flex;flex-direction:column;gap:8px;min-height:96px;}
+.pcard.dis{opacity:.38}
+.pcard .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pcard .nm{font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:.02em;line-height:1.15}
+.posb{font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 6px;border:1px solid var(--card-edge);color:var(--chalk-dim);white-space:nowrap}
+.rat{display:flex;align-items:center;gap:8px}
+.rat .num{font-family:var(--display);font-weight:700;font-size:22px;color:var(--amber)}
+.rat .bar{flex:1;height:6px;background:rgba(255,255,255,.08)}
+.rat .bar i{display:block;height:100%;background:var(--amber)}
+.hiddenrat{font-size:11px;color:var(--chalk-dim);letter-spacing:.1em}
+.fee{font-size:12px;font-weight:700;color:var(--chalk)}
+.signrow{display:flex;gap:6px;margin-top:auto}
+.signrow button{flex:1;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;color:var(--amber);border:1.5px solid var(--amber);padding:7px 4px;cursor:pointer;}
+.signrow button:hover:not(:disabled){background:var(--amber);color:#1a1405}
+.signrow button:disabled{border-color:var(--card-edge);color:rgba(244,242,231,.3);cursor:not-allowed;background:transparent}
+.squad h3{font-family:var(--display);text-transform:uppercase;font-size:18px;letter-spacing:.05em;border-top:2px solid var(--chalk-dim);padding-top:14px;margin-bottom:10px}
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.unit .uh{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--chalk-dim);margin-bottom:6px}
+.slot{border:1.5px dashed var(--card-edge);padding:7px 10px;margin-bottom:6px;font-size:12px;display:flex;
+  justify-content:space-between;gap:8px;min-height:34px;align-items:center;}
+.slot.filled{border-style:solid;border-color:rgba(255,180,0,.45);background:rgba(255,180,0,.06)}
+.slot.newsign{border-color:var(--amber);background:rgba(255,180,0,.14)}
+.slot .who{font-family:var(--display);font-size:14px;letter-spacing:.02em}
+.slot .from{font-size:10px;color:var(--chalk-dim);text-align:right;line-height:1.3}
+.slot .empty{color:rgba(244,242,231,.3);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.verdict{margin:10px 0 18px}
+.verdict .stamp{display:inline-block;font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(24px,6vw,50px);line-height:1;padding:10px 18px;border:4px solid currentColor;
+  transform:rotate(-2deg);letter-spacing:.02em;}
+.stamp.safe{color:var(--amber)}
+.stamp.down{color:var(--red);background:rgba(208,33,47,.08)}
+.stamp.elite{color:var(--chalk)}
+.verdict p{margin-top:14px;font-size:13.5px;line-height:1.7;max-width:64ch}
+.statline{display:flex;gap:22px;flex-wrap:wrap;margin:18px 0 8px}
+.stat .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--chalk-dim)}
+.stat .v{font-family:var(--display);font-weight:700;font-size:30px;color:var(--amber)}
+.stat .v.red{color:var(--red)}
+.stat .v.white{color:var(--chalk)}
+table.lg{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:12.5px}
+table.lg th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--chalk-dim);text-align:left;padding:6px 8px;border-bottom:2px solid var(--chalk-dim)}
+table.lg td{padding:7px 8px;border-bottom:1px solid rgba(244,242,231,.1)}
+table.lg td.num{text-align:right;font-weight:600}
+tr.you td{background:rgba(255,180,0,.12);border-top:1.5px solid var(--amber);border-bottom:1.5px solid var(--amber)}
+tr.you td:first-child{border-left:1.5px solid var(--amber)}
+tr.you td:last-child{border-right:1.5px solid var(--amber)}
+tr.dimrow td{color:rgba(244,242,231,.55)}
+.relmark{color:var(--red);font-weight:700}
+.promark{color:var(--amber);font-weight:700}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:24px}
+.note{background:var(--card);border:1.5px solid var(--card-edge);padding:14px}
+.note .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+.note .v{font-size:13px;line-height:1.55}
+.again{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.playoff{background:#08130C;border:2px solid var(--card-edge);padding:16px;margin:16px 0 20px}
+.playoff .ph{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.tie{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(244,242,231,.08);font-size:13px;flex-wrap:wrap}
+.tie:last-child{border-bottom:none}
+.tie .res{font-family:var(--display);font-size:16px;letter-spacing:.04em}
+.tie .res.w{color:var(--amber)}
+.tie .res.l{color:var(--red)}
+.windowbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.budgetbox{display:flex;gap:22px;flex-wrap:wrap}
+.budgetbox .b .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--chalk-dim)}
+.budgetbox .b .v{font-family:var(--display);font-weight:700;font-size:26px;color:var(--amber)}
+.replace-prompt{background:rgba(255,180,0,.08);border:1.5px solid var(--amber);padding:14px;margin-bottom:18px}
+.replace-prompt .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.replace-prompt .opts{display:flex;gap:8px;flex-wrap:wrap}
+.replace-prompt .opts button{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;
+  background:transparent;color:var(--chalk);border:1.5px solid var(--card-edge);padding:8px 10px;cursor:pointer;text-transform:none}
+.replace-prompt .opts button:hover{border-color:var(--amber);color:var(--amber)}
+.agewarn{font-size:11px;color:var(--red);letter-spacing:.06em;margin:-6px 0 14px}
+/* score posting + leaderboard */
+.postbox{background:var(--card);border:1.5px solid var(--card-edge);padding:14px;margin:0 0 22px;max-width:480px}
+.postbox .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.postbox .row{display:flex;gap:8px;flex-wrap:wrap}
+.postbox input{font-family:var(--mono);font-size:13px;background:#08130C;color:var(--chalk);
+  border:1.5px solid var(--card-edge);padding:9px 10px;flex:1;min-width:140px;text-transform:uppercase;letter-spacing:.06em}
+.postbox input:focus{outline:none;border-color:var(--amber)}
+.postbox .msg{font-size:11px;color:var(--chalk-dim);margin-top:8px;line-height:1.5}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.tabs button{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;color:var(--chalk-dim);border:1.5px solid var(--card-edge);padding:8px 12px;cursor:pointer}
+.tabs button.act{color:#1a1405;background:var(--amber);border-color:var(--amber)}
+.boardnote{font-size:11px;color:var(--chalk-dim);line-height:1.6;max-width:62ch;margin-top:6px}
+.timeline td .lg-ch{color:var(--chalk-dim)}
+footer.ft{margin-top:40px;font-size:10.5px;line-height:1.6;color:rgba(244,242,231,.4);max-width:70ch}
+@media (max-width:640px){.frame{outline-offset:-8px;padding-bottom:48px}.cands{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header class="top">
+    <div class="wordmark">Survive <em>the Drop</em></div>
+    <div class="headright">
+      <button class="btn ghost" id="btn-board">🏆 Leaderboard</button>
+      <div class="tagline">Championship → Premier League</div>
+    </div>
+  </header>
+
+  <!-- MODE SELECT -->
+  <section class="screen on" id="scr-mode">
+    <div class="hero">
+      <h1>Win promotion.<br>Then beat <span class="drop">the drop.</span></h1>
+      <p class="lede"><b>Season one:</b> draft an XI from random Championship squads of the past and fight for promotion — top two go up, 3rd–6th means the playoff lottery. <b>Season two:</b> your promotion route earns a budget; spend it on up to five real signings, then survive the Premier League. Or take <b>The Long Game</b> and see how high a multi-season project can climb.</p>
+      <div class="rules">
+        <span>01</span> Eleven spins, one signing per spin, real positions enforced (4·3·3).<br>
+        <span>02</span> Top 2 go up. 3rd–6th is <span>PLAYOFFS SECURED</span> — win two ties or the season dies at Wembley.<br>
+        <span>03</span> Champions £60m · runners-up £50m · playoff winners £40m. Up to <span>5 signings</span> per window.<br>
+        <span>04</span> In The Long Game your squad <span>ages every summer</span> and budgets follow your finishes.
+      </div>
+    </div>
+    <div class="modes">
+      <button class="mode-card" id="btn-classic">
+        <div class="kicker">Mode 01</div>
+        <h2>Gaffer Mode</h2>
+        <p>Two-season run. Ratings visible everywhere, no rerolls — live with every spin.</p>
+        <div class="bonus">Score ×1.0</div>
+      </button>
+      <button class="mode-card" id="btn-scout">
+        <div class="kicker">Mode 02</div>
+        <h2>Blind Scout</h2>
+        <p>Two-season run. Ratings hidden in the draft and the market — names, positions and fees only.</p>
+        <div class="bonus">Score ×1.25 — knowledge pays</div>
+      </button>
+      <button class="mode-card" id="btn-reroll">
+        <div class="kicker">Mode 03</div>
+        <h2>Reroll Mode</h2>
+        <p>Two-season run with 2 rerolls per season: re-spin clubs in the draft, refresh the market in the window.</p>
+        <div class="bonus">Score ×0.9 — comfort costs</div>
+      </button>
+      <button class="mode-card" id="btn-season">
+        <div class="kicker">Mode 04 · New</div>
+        <h2>The Long Game</h2>
+        <p>Manage for 3, 5 or 10 seasons. Squads age, budgets follow your finishes, relegation sends you back down. How high can the project climb?</p>
+        <div class="bonus">Score ×1.0 · auto-saves between seasons</div>
+      </button>
+    </div>
+    <div class="resume" id="resume"></div>
+  </section>
+
+  <!-- CAREER LENGTH -->
+  <section class="screen" id="scr-len">
+    <div class="hero">
+      <h1>How long is<br>the project?</h1>
+      <p class="lede">Every summer your whole squad ages (<b>−1 rating</b>) and the board hands you a budget based on last season's finish. Premier League money climbs the table fast; failure pays in loose change. The final score is everything you bank across the career — your <b>best Premier League finish</b> is the headline.</p>
+    </div>
+    <div class="modes">
+      <button class="mode-card" data-len="3"><div class="kicker">Short</div><h2>3 Seasons</h2><p>A sprint. Roughly: go up, stay up, push on. Little room for a bad year.</p></button>
+      <button class="mode-card" data-len="5"><div class="kicker">Medium</div><h2>5 Seasons</h2><p>Time to build something — and time for one full rebuild if it goes wrong.</p></button>
+      <button class="mode-card" data-len="10"><div class="kicker">Marathon</div><h2>10 Seasons</h2><p>A dynasty attempt. Ten summers of aging legs, ten windows. Top four or bust.</p></button>
+    </div>
+    <div class="again" style="margin-top:18px"><button class="btn ghost" id="btn-len-back">← Back</button></div>
+  </section>
+
+  <!-- DRAFT -->
+  <section class="screen" id="scr-draft">
+    <div class="draftbar">
+      <div class="roundpill">Signing <b id="rnd">1</b> / 11 &nbsp;·&nbsp; <span id="modetag"></span><span id="careertag-d"></span></div>
+      <button class="btn ghost" id="btn-respin">Reroll club (<span id="spinsleft">0</span> left)</button>
+    </div>
+    <div class="board" aria-live="polite">
+      <div class="label"><span>Fixture board — club &amp; season</span><span>Draft phase</span></div>
+      <div class="flipline" id="flip-club"></div>
+      <div class="flipline" id="flip-season"></div>
+    </div>
+    <p class="duty" id="duty"></p>
+    <div class="cands" id="cands"></div>
+    <div class="squad"><h3>Your XI — 4·3·3</h3><div class="units" id="units"></div></div>
+  </section>
+
+  <!-- CHAMPIONSHIP RESULT -->
+  <section class="screen" id="scr-champ">
+    <div class="verdict"><span class="stamp" id="c-stamp"></span><p id="c-copy"></p></div>
+    <div class="statline" id="c-stats"></div>
+    <div class="playoff" id="playoff" style="display:none">
+      <div class="ph">Playoff campaign</div><div id="playoff-ties"></div>
+    </div>
+    <table class="lg"><thead><tr><th>Pos</th><th>Club</th><th class="num" style="text-align:right">W</th><th class="num" style="text-align:right">D</th><th class="num" style="text-align:right">L</th><th class="num" style="text-align:right">Pts</th></tr></thead><tbody id="c-tbl"></tbody></table>
+    <div class="postbox" id="c-post" style="display:none"></div>
+    <div class="again" id="c-actions"></div>
+  </section>
+
+  <!-- TRANSFER WINDOW -->
+  <section class="screen" id="scr-window">
+    <div class="windowbar">
+      <div class="budgetbox">
+        <div class="b"><div class="k">Budget left</div><div class="v">£<span id="budget">0</span>m</div></div>
+        <div class="b"><div class="k">Signings</div><div class="v"><span id="signs">0</span>/5</div></div>
+        <div class="b" id="careerbox" style="display:none"><div class="k">Career</div><div class="v" style="font-size:18px" id="careertag-w"></div></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" id="btn-refresh">Reroll market (<span id="mkleft">0</span> left)</button>
+        <button class="btn" id="btn-kickoff">Start the season →</button>
+      </div>
+    </div>
+    <p class="duty" id="window-copy"></p>
+    <p class="agewarn" id="agewarn" style="display:none">⚠ Pre-season fitness report: the whole squad has aged — every rating −1.</p>
+    <div class="replace-prompt" id="replace" style="display:none"></div>
+    <div class="cands" id="market"></div>
+    <div class="squad"><h3>Your XI — 4·3·3 <span style="font-size:11px;color:var(--chalk-dim);letter-spacing:.1em;font-family:var(--mono)">— new signings highlighted</span></h3><div class="units" id="w-units"></div></div>
+  </section>
+
+  <!-- PL RESULT -->
+  <section class="screen" id="scr-result">
+    <div class="verdict"><span class="stamp" id="stamp"></span><p id="verdict-copy"></p></div>
+    <div class="statline" id="statline"></div>
+    <table class="lg"><thead><tr><th>Pos</th><th>Club</th><th class="num" style="text-align:right">W</th><th class="num" style="text-align:right">D</th><th class="num" style="text-align:right">L</th><th class="num" style="text-align:right">Pts</th></tr></thead><tbody id="tbl"></tbody></table>
+    <div class="notes" id="notes"></div>
+    <div class="postbox" id="r-post" style="display:none"></div>
+    <div class="again" id="r-actions"></div>
+  </section>
+
+  <!-- CAREER SUMMARY -->
+  <section class="screen" id="scr-career">
+    <div class="verdict"><span class="stamp" id="k-stamp"></span><p id="k-copy"></p></div>
+    <div class="statline" id="k-stats"></div>
+    <table class="lg timeline"><thead><tr><th>Season</th><th>League</th><th>Finish</th><th class="num" style="text-align:right">Pts</th><th>Note</th></tr></thead><tbody id="k-tbl"></tbody></table>
+    <div class="postbox" id="k-post" style="display:none"></div>
+    <div class="again">
+      <button class="btn" id="btn-k-again">New career</button>
+      <button class="btn ghost" id="btn-k-home">Change mode</button>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section class="screen" id="scr-board">
+    <div class="hero"><h1>Leaderboard</h1></div>
+    <div class="tabs" id="lb-tabs">
+      <button data-m="classic" class="act">Gaffer</button>
+      <button data-m="scout">Blind Scout</button>
+      <button data-m="reroll">Reroll</button>
+      <button data-m="season">The Long Game</button>
+    </div>
+    <table class="lg"><thead><tr><th>#</th><th>Manager</th><th class="num" style="text-align:right">Best score</th></tr></thead><tbody id="lb-tbl"></tbody></table>
+    <p class="boardnote" id="lb-note"></p>
+    <div class="again" style="margin-top:14px"><button class="btn ghost" id="btn-board-back">← Back to menu</button></div>
+  </section>
+
+  <footer class="ft">Independent fan-made game inspired by viral team-builder challenges. Not affiliated with the Premier League, the EFL, or any club or player. Ability ratings and transfer fees are this game's own fictional estimates for entertainment only.</footer>
+</div>
+<script>
+/* ====================== DRAFT DATA ====================== */
+const ROSTERS=[
+ {club:"Leicester City",season:"2013/14",players:[
+  ["Kasper Schmeichel","GK",78],["Wes Morgan","DF",74],["Ritchie De Laet","DF",65],["Paul Konchesky","DF",63],["Liam Moore","DF",62],
+  ["Danny Drinkwater","MF",75],["Matty James","MF",64],["Andy King","MF",70],["Jeff Schlupp","DF/MF",68],
+  ["Riyad Mahrez","FW",80],["Anthony Knockaert","FW",67],["Jamie Vardy","FW",84],["David Nugent","FW",66]]},
+ {club:"AFC Bournemouth",season:"2014/15",players:[
+  ["Artur Boruc","GK",70],["Simon Francis","DF",66],["Steve Cook","DF",65],["Tommy Elphick","DF",62],["Charlie Daniels","DF",67],
+  ["Harry Arter","MF",69],["Andrew Surman","MF",64],["Dan Gosling","MF",63],["Matt Ritchie","MF/FW",72],
+  ["Marc Pugh","FW",62],["Callum Wilson","FW",75],["Yann Kermorgant","FW",63],["Junior Stanislas","FW",66]]},
+ {club:"Watford",season:"2014/15",players:[
+  ["Heurelho Gomes","GK",72],["Craig Cathcart","DF",68],["Gabriele Angella","DF",62],["Tommie Hoban","DF",60],["Ikechi Anya","DF/MF",64],
+  ["Dániel Tőzsér","MF",65],["Almen Abdi","MF",70],["Gianni Munari","MF",62],
+  ["Fernando Forestieri","FW",67],["Matěj Vydra","FW",70],["Odion Ighalo","FW",74],["Troy Deeney","FW",76]]},
+ {club:"Burnley",season:"2015/16",players:[
+  ["Tom Heaton","GK",76],["Ben Mee","DF",72],["Michael Keane","DF",75],["Matt Lowton","DF",66],["Stephen Ward","DF",65],
+  ["Dean Marney","MF",62],["David Jones","MF",64],["Joey Barton","MF",66],["Scott Arfield","MF",67],["George Boyd","MF/FW",66],
+  ["Andre Gray","FW",72],["Sam Vokes","FW",65]]},
+ {club:"Middlesbrough",season:"2015/16",players:[
+  ["Dimi Konstantopoulos","GK",60],["Daniel Ayala","DF",68],["Ben Gibson","DF",72],["Emilio Nsue","DF",62],["George Friend","DF",66],
+  ["Adam Clayton","MF",67],["Grant Leadbitter","MF",66],["Adam Forshaw","MF",63],["Stewart Downing","MF/FW",69],["Gastón Ramírez","MF/FW",69],
+  ["Albert Adomah","FW",68],["Cristhian Stuani","FW",70],["David Nugent","FW",64]]},
+ {club:"Newcastle United",season:"2016/17",players:[
+  ["Karl Darlow","GK",64],["Jamaal Lascelles","DF",72],["Ciaran Clark","DF",70],["DeAndre Yedlin","DF",66],["Paul Dummett","DF",64],
+  ["Jonjo Shelvey","MF",74],["Isaac Hayden","MF",63],["Mohamed Diamé","MF",64],
+  ["Matt Ritchie","FW",72],["Christian Atsu","FW",66],["Dwight Gayle","FW",73],["Ayoze Pérez","FW",69],["Yoan Gouffran","FW",62]]},
+ {club:"Wolverhampton Wanderers",season:"2017/18",players:[
+  ["John Ruddy","GK",68],["Conor Coady","DF",74],["Willy Boly","DF",75],["Ryan Bennett","DF",66],["Matt Doherty","DF",73],["Barry Douglas","DF",67],
+  ["Rúben Neves","MF",82],["Romain Saïss","MF",68],["Alfred N'Diaye","MF",62],
+  ["Hélder Costa","FW",72],["Diogo Jota","FW",78],["Ivan Cavaleiro","FW",70],["Léo Bonatini","FW",63]]},
+ {club:"Fulham",season:"2017/18",players:[
+  ["Marcus Bettinelli","GK",64],["Denis Odoi","DF",62],["Tim Ream","DF",67],["Tomáš Kalas","DF",64],["Ryan Fredericks","DF",68],
+  ["Kevin McDonald","MF",63],["Stefan Johansen","MF",67],["Tom Cairney","MF",76],["Ryan Sessegnon","DF/FW",77],
+  ["Floyd Ayité","FW",64],["Aleksandar Mitrović","FW",78],["Aboubakar Kamara","FW",62],["Sheyi Ojo","FW",63]]},
+ {club:"Cardiff City",season:"2017/18",players:[
+  ["Neil Etheridge","GK",66],["Sean Morrison","DF",70],["Sol Bamba","DF",69],["Bruno Ecuele Manga","DF",64],["Joe Bennett","DF",62],["Lee Peltier","DF",61],
+  ["Joe Ralls","MF",66],["Aron Gunnarsson","MF",65],["Callum Paterson","MF/FW",64],
+  ["Junior Hoilett","FW",68],["Nathaniel Mendez-Laing","FW",65],["Kenneth Zohore","FW",64],["Danny Ward","FW",61]]},
+ {club:"Aston Villa",season:"2018/19",players:[
+  ["Jed Steer","GK",64],["Tyrone Mings","DF",73],["Axel Tuanzebe","DF",66],["Ahmed Elmohamady","DF",63],["Neil Taylor","DF",62],["Kortney Hause","DF",63],
+  ["Jack Grealish","MF",82],["John McGinn","MF",76],["Conor Hourihane","MF",67],["Glenn Whelan","MF",60],
+  ["Tammy Abraham","FW",76],["Anwar El Ghazi","FW",66],["Jonathan Kodjia","FW",65],["Albert Adomah","FW",63]]},
+ {club:"Norwich City",season:"2018/19",players:[
+  ["Tim Krul","GK",73],["Max Aarons","DF",74],["Ben Godfrey","DF",72],["Christoph Zimmermann","DF",67],["Jamal Lewis","DF",68],
+  ["Tom Trybull","MF",62],["Kenny McLean","MF",65],["Marco Stiepermann","MF",64],["Mario Vrančić","MF",65],
+  ["Emiliano Buendía","FW",79],["Todd Cantwell","FW",70],["Teemu Pukki","FW",77],["Onel Hernández","FW",66]]},
+ {club:"Sheffield United",season:"2018/19",players:[
+  ["Dean Henderson","GK",76],["Chris Basham","DF",67],["John Egan","DF",70],["Jack O'Connell","DF",69],["George Baldock","DF",66],["Enda Stevens","DF",67],
+  ["Oliver Norwood","MF",70],["John Fleck","MF",69],["Mark Duffy","MF",60],
+  ["David McGoldrick","FW",68],["Billy Sharp","FW",69],["Leon Clarke","FW",62],["Gary Madine","FW",58]]},
+ {club:"Leeds United",season:"2019/20",players:[
+  ["Illan Meslier","GK",72],["Luke Ayling","DF",70],["Ben White","DF",74],["Liam Cooper","DF",69],["Stuart Dallas","DF/MF",68],["Gaetano Berardi","DF",61],
+  ["Kalvin Phillips","MF",79],["Mateusz Klich","MF",70],["Pablo Hernández","MF/FW",75],
+  ["Jack Harrison","FW",71],["Hélder Costa","FW",67],["Patrick Bamford","FW",72],["Tyler Roberts","FW",63]]},
+ {club:"West Bromwich Albion",season:"2019/20",players:[
+  ["Sam Johnstone","GK",71],["Darnell Furlong","DF",66],["Semi Ajayi","DF",68],["Kyle Bartley","DF",65],["Kieran Gibbs","DF",66],
+  ["Romaine Sawyers","MF",66],["Jake Livermore","MF",63],["Filip Krovinović","MF",64],
+  ["Matheus Pereira","FW",75],["Grady Diangana","FW",70],["Matt Phillips","FW",66],["Hal Robson-Kanu","FW",62],["Charlie Austin","FW",63]]},
+ {club:"Brentford",season:"2020/21",players:[
+  ["David Raya","GK",75],["Rico Henry","DF",71],["Ethan Pinnock","DF",71],["Pontus Jansson","DF",67],["Henrik Dalsgaard","DF",64],["Mads Roerslev","DF",62],
+  ["Christian Nørgaard","MF",72],["Vitaly Janelt","MF",67],["Mathias Jensen","MF",66],["Josh Dasilva","MF",68],
+  ["Sergi Canós","FW",65],["Bryan Mbeumo","FW",74],["Ivan Toney","FW",79],["Marcus Forss","FW",61]]},
+ {club:"Ipswich Town",season:"2023/24",players:[
+  ["Václav Hladký","GK",64],["Leif Davis","DF",66],["Luke Woolfenden","DF",63],["Cameron Burgess","DF",62],["Harry Clarke","DF",65],["Axel Tuanzebe","DF",64],
+  ["Sam Morsy","MF",66],["Massimo Luongo","MF",64],["Jack Taylor","MF",62],
+  ["Conor Chaplin","FW",68],["Wes Burns","FW",67],["Omari Hutchinson","FW",66],["George Hirst","FW",64],["Nathan Broadhead","FW",65]]}
+];
+
+/* ====================== TRANSFER MARKET (global pool) ====================== */
+const MARKET_POOL=[
+ ["Emiliano Martínez","GK",84,32],["Gregor Kobel","GK",83,30],["Diogo Costa","GK",86,45],["José Sá","GK",77,14],
+ ["Bart Verbruggen","GK",76,12],["Mark Flekken","GK",73,8],["Sam Johnstone","GK",71,5],["Wes Foderingham","GK",68,2],
+ ["William Saliba","DF",89,75],["Alessandro Bastoni","DF",88,65],["Marc Guéhi","DF",83,45],["Murillo","DF",81,32],
+ ["Sven Botman","DF",80,28],["Rayan Aït-Nouri","DF",79,28],["Tino Livramento","DF",78,25],["Kieran Trippier","DF",78,15],
+ ["Maxence Lacroix","DF",77,18],["Marcos Senesi","DF",76,14],["Ola Aina","DF",74,8],["Kurt Zouma","DF",73,7],
+ ["Jan Bednarek","DF",72,6],["Vladimír Coufal","DF",71,4],
+ ["Aurélien Tchouaméni","MF",87,65],["Bruno Guimarães","MF",87,55],["João Palhinha","MF",83,42],["Carlos Baleba","MF",82,38],
+ ["Adam Wharton","MF",81,35],["Morgan Gibbs-White","MF",81,35],["Yves Bissouma","MF",77,18],["Sander Berge","MF",75,12],
+ ["Lewis Cook","MF",74,10],["Flynn Downes","MF",73,8],["Jens Cajuste","MF",72,6],["Will Hughes","MF",71,4],
+ ["Victor Osimhen","FW",88,70],["Khvicha Kvaratskhelia","FW",88,72],["Ollie Watkins","FW",84,48],["Anthony Gordon","FW",84,48],
+ ["Matheus Cunha","FW",83,45],["Bryan Mbeumo","FW",82,40],["Jarrod Bowen","FW",82,40],["Yoane Wissa","FW",79,25],
+ ["Jørgen Strand Larsen","FW",78,22],["Emiliano Buendía","FW",76,14],["Beto","FW",74,10],["Neal Maupay","FW",72,6],
+ ["Danny Ings","FW",71,5],["Jamie Vardy","FW",73,3]
+];
+
+/* ====================== LEAGUE BASELINES ====================== */
+const PL_RIVALS=[["Man City",88],["Arsenal",84],["Liverpool",82],["Chelsea",71],["Newcastle",68],["Man United",66],
+ ["Aston Villa",64],["Spurs",61],["Brighton",59],["Crystal Palace",55],["West Ham",52],["Fulham",50],
+ ["Brentford",48],["Everton",46],["Bournemouth",44],["Wolves",41],["Nott'm Forest",38],["Burnley",33],["Sunderland",30]];
+const CH_RIVALS=[["Leeds United",93],["Sheffield United",89],["Coventry City",83],["Middlesbrough",78],["West Brom",75],
+ ["Norwich City",73],["Hull City",70],["Watford",68],["Bristol City",66],["Stoke City",64],["Swansea City",62],
+ ["Blackburn Rovers",60],["Preston North End",58],["Millwall",56],["Cardiff City",54],["QPR",52],["Birmingham City",50],
+ ["Sheffield Wednesday",48],["Derby County",46],["Portsmouth",44],["Luton Town",42],["Plymouth Argyle",38],["Oxford United",34]];
+
+/* ====================== STORAGE — hosted build ======================
+   Saves: browser localStorage. Leaderboard: PlayFab (Title 103A04).
+   Only the public Title ID lives here — never put secret keys in client code. */
+const PF_TITLE="103A04";
+const PF_API=`https://${PF_TITLE.toLowerCase()}.playfabapi.com`;
+const HAS_STORE=(()=>{try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true;}catch(e){return false;}})();
+async function sget(key){try{const v=localStorage.getItem(key);return v?JSON.parse(v):null;}catch(e){return null;}}
+async function sset(key,val){try{localStorage.setItem(key,JSON.stringify(val));return true;}catch(e){return false;}}
+async function sdel(key){try{localStorage.removeItem(key);}catch(e){}}
+const SAVE_KEY="std-career-save";
+const LB_STAT=m=>"score_"+m;
+
+/* ---- PlayFab client (anonymous device login) ---- */
+let pfTicket=null;
+function pfDeviceId(){
+  let id=null;
+  try{id=localStorage.getItem("std-device");}catch(e){}
+  if(!id){id="std-"+([...crypto.getRandomValues(new Uint8Array(12))].map(b=>b.toString(16).padStart(2,"0")).join(""));
+    try{localStorage.setItem("std-device",id);}catch(e){}}
+  return id;
+}
+async function pfCall(path,body,auth){
+  const headers={"Content-Type":"application/json"};
+  if(auth&&pfTicket)headers["X-Authorization"]=pfTicket;
+  const res=await fetch(PF_API+path,{method:"POST",headers,body:JSON.stringify(body)});
+  const data=await res.json();
+  if(!res.ok||data.code>=400)throw new Error(data.errorMessage||("PlayFab "+(data.code||res.status)));
+  return data.data;
+}
+async function pfLogin(){
+  if(pfTicket)return;
+  const d=await pfCall("/Client/LoginWithCustomID",{TitleId:PF_TITLE,CustomId:pfDeviceId(),CreateAccount:true});
+  pfTicket=d.SessionTicket;
+}
+async function pfSetName(name){
+  /* PlayFab needs 3–25 chars; pad short names */
+  let n=name.length<3?(name+"_"+rnd(10,99)).slice(0,25):name.slice(0,25);
+  try{await pfCall("/Client/UpdateUserTitleDisplayName",{DisplayName:n},true);}
+  catch(e){ /* name taken → make it unique and retry once */
+    n=(n.slice(0,20)+"_"+rnd(100,999));
+    await pfCall("/Client/UpdateUserTitleDisplayName",{DisplayName:n},true);
+  }
+}
+async function pfPostScore(mode,score){
+  await pfCall("/Client/UpdatePlayerStatistics",{Statistics:[{StatisticName:LB_STAT(mode),Value:Math.round(score)}]},true);
+}
+async function pfBoard(mode){
+  const d=await pfCall("/Client/GetLeaderboard",{StatisticName:LB_STAT(mode),StartPosition:0,MaxResultsCount:20},true);
+  return d.Leaderboard||[];
+}
+
+/* ====================== STATE ====================== */
+const SLOTS=[{u:"GK",n:1},{u:"DF",n:4},{u:"MF",n:3},{u:"FW",n:3}];
+const ULAB={GK:"Goalkeeper",DF:"Defence",MF:"Midfield",FW:"Attack"};
+const MODE_NAMES={classic:"Gaffer Mode",scout:"Blind Scout",reroll:"Reroll Mode",season:"The Long Game"};
+let S=null;
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const reduceMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+function modeMult(){return S.mode==="scout"?1.25:S.mode==="reroll"?0.9:1;}
+
+function newGame(mode,len){
+  S={mode, round:1, rerolls:(mode==="reroll"?2:0), used:new Set(),
+     squad:{GK:[],DF:[],MF:[],FW:[]}, picks:[], current:null, locked:false,
+     champ:null, budget:0, signings:0, market:[], pending:null, posted:false,
+     career: mode==="season" ? {len, num:1, league:"CH", history:[], bestPL:null, total:0, over:false} : null};
+  if(mode==="season")sdel(SAVE_KEY);
+  show("scr-draft");
+  $("modetag").textContent=MODE_NAMES[mode];
+  $("careertag-d").textContent = S.career?` · Season 1/${len}`:"";
+  $("btn-respin").style.display = mode==="reroll"?"":"none";
+  renderSquad("units",false); spin();
+}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));$(id).classList.add("on");window.scrollTo({top:0});}
+function openUnits(){return SLOTS.filter(s=>S.squad[s.u].length<s.n).map(s=>s.u);}
+
+/* ====================== DRAFT / SPIN ====================== */
+function spin(isReroll){
+  if(S.locked)return;
+  if(isReroll){ if(S.rerolls<=0)return; S.rerolls--; }
+  S.locked=true;
+  const avail=ROSTERS.map((r,i)=>i).filter(i=>!S.used.has(i));
+  const idx=avail[rnd(0,avail.length-1)];
+  S.current=idx; S.used.add(idx);
+  const r=ROSTERS[idx];
+  renderFlips($("flip-club"),r.club.toUpperCase(),false);
+  renderFlips($("flip-season"),r.season,true);
+  $("cands").innerHTML=""; $("duty").innerHTML="";
+  setTimeout(()=>{settleFlips();renderCands(r);S.locked=false;updateBar();},reduceMotion()?50:900);
+  updateBar();
+}
+const GLYPHS="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function renderFlips(el,text,season){
+  el.innerHTML="";
+  [...text].forEach(ch=>{
+    const d=document.createElement("div");
+    d.className="flip spin"+(season?" season":"");
+    d.dataset.final=ch;
+    d.textContent= ch===" " ? "\u00A0" : GLYPHS[rnd(0,25)];
+    if(ch===" "){d.style.background="transparent";d.style.border="none";}
+    el.appendChild(d);
+  });
+  if(!reduceMotion()){
+    let t=0;
+    const iv=setInterval(()=>{t++;
+      el.querySelectorAll(".flip.spin").forEach(f=>{if(f.dataset.final!==" ")f.textContent=GLYPHS[rnd(0,25)];});
+      if(t>9)clearInterval(iv);},70);
+  }
+}
+function settleFlips(){
+  document.querySelectorAll(".flip").forEach(f=>{
+    f.classList.remove("spin");
+    f.textContent=f.dataset.final===" "?"\u00A0":f.dataset.final;
+  });
+}
+function updateBar(){
+  $("rnd").textContent=S.round;
+  $("spinsleft").textContent=S.rerolls;
+  $("btn-respin").disabled=S.rerolls<=0||S.locked;
+}
+function eligible(posStr){const open=openUnits();return posStr.split("/").filter(p=>open.includes(p));}
+function ratHTML(rating){
+  return S.mode==="scout"
+    ? `<div class="hiddenrat">RATING HIDDEN</div>`
+    : `<div class="rat"><span class="num">${rating}</span><span class="bar"><i style="width:${Math.max(4,(rating-40)/59*100)}%"></i></span></div>`;
+}
+function renderCands(r){
+  const open=openUnits();
+  $("duty").innerHTML=`Sign <b>one player</b> from this squad. Open slots: <b>${open.map(u=>u+" ×"+(SLOTS.find(s=>s.u===u).n-S.squad[u].length)).join(" · ")}</b>`;
+  const wrap=$("cands");
+  r.players.forEach((p,pi)=>{
+    const [name,pos,rating]=p;
+    const fits=eligible(pos);
+    const card=document.createElement("div");
+    card.className="pcard"+(fits.length?"":" dis");
+    const btns=fits.map(u=>`<button data-pi="${pi}" data-u="${u}">${fits.length>1?("Sign · "+u):"Sign"}</button>`).join("")||`<button disabled>No open slot</button>`;
+    card.innerHTML=`<div class="row1"><div class="nm">${esc(name)}</div><div class="posb">${pos}</div></div>${ratHTML(rating)}<div class="signrow">${btns}</div>`;
+    wrap.appendChild(card);
+  });
+  wrap.querySelectorAll("button[data-pi]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      if(S.locked)return;
+      const [name,pos,rating]=r.players[+b.dataset.pi];
+      const unit=b.dataset.u;
+      const pl={name,rating,unit,club:r.club,season:r.season,newSign:false};
+      S.squad[unit].push(pl); S.picks.push(pl);
+      renderSquad("units",false);
+      if(S.picks.length>=11){simChampionship();return;}
+      S.round++; spin();
+    });
+  });
+}
+function renderSquad(targetId,markNew){
+  const u=$(targetId); u.innerHTML="";
+  SLOTS.forEach(s=>{
+    const d=document.createElement("div"); d.className="unit";
+    let rows="";
+    for(let i=0;i<s.n;i++){
+      const pl=S.squad[s.u][i];
+      rows+= pl
+        ? `<div class="slot filled${markNew&&pl.newSign?" newsign":""}"><span class="who">${esc(pl.name)}${S.mode!=="scout"?` <span style="font-size:10px;color:var(--amber)">${pl.rating}</span>`:""}</span><span class="from">${esc(pl.club)}<br>${esc(pl.season)}</span></div>`
+        : `<div class="slot"><span class="empty">— open ${s.u} —</span></div>`;
+    }
+    d.innerHTML=`<div class="uh">${ULAB[s.u]} (${S.squad[s.u].length}/${s.n})</div>${rows}`;
+    u.appendChild(d);
+  });
+}
+
+/* ====================== SHARED SIM HELPERS ====================== */
+function teamStats(){
+  const avg=u=>{const a=S.squad[u];return a.reduce((t,p)=>t+p.rating,0)/a.length;};
+  const gk=avg("GK"),df=avg("DF"),mf=avg("MF"),fw=avg("FW");
+  const attMax=Math.max(...S.squad.FW.map(p=>p.rating));
+  const all=[...S.squad.GK,...S.squad.DF,...S.squad.MF,...S.squad.FW];
+  const teamAvg=all.reduce((t,p)=>t+p.rating,0)/11;
+  return {gk,df,mf,fw,attMax,teamAvg};
+}
+function deriveWDL(pts,games){
+  let D=rnd(Math.round(games*0.18),Math.round(games*0.28));
+  while((pts-D)%3!==0||pts-D<0)D--;
+  if(D<0){D=0;while((pts-D)%3!==0)D++;}
+  const W=(pts-D)/3;
+  return [W,D,games-W-D];
+}
+function buildTable(rivals,myPts,jit){
+  const t=rivals.map(([n,p])=>({name:n,pts:Math.max(12,p+rnd(-jit,jit)),you:false}));
+  t.push({name:"Your XI",pts:myPts,you:true});
+  t.sort((a,b)=>b.pts-a.pts||(a.you?-1:1));
+  return t;
+}
+function tableRows(tbodyId,table,youIdx,games,myWDL,bottomFrom,promoTo){
+  const tb=$(tbodyId); tb.innerHTML="";
+  const showIdx=new Set();
+  for(let i=0;i<Math.min(3,table.length);i++)showIdx.add(i);
+  if(promoTo)for(let i=0;i<promoTo;i++)showIdx.add(i);
+  for(let i=Math.max(0,youIdx-2);i<=Math.min(table.length-1,youIdx+2);i++)showIdx.add(i);
+  for(let i=bottomFrom;i<table.length;i++)showIdx.add(i);
+  let last=-1;
+  [...showIdx].sort((a,b)=>a-b).forEach(i=>{
+    if(last>=0&&i-last>1){
+      const gap=document.createElement("tr");
+      gap.innerHTML=`<td colspan="6" style="color:rgba(244,242,231,.3);font-size:10px;letter-spacing:.2em">···</td>`;
+      tb.appendChild(gap);
+    }
+    last=i;
+    const t=table[i];
+    const pts=t.pts;
+    let W,D,L;
+    if(t.you){[W,D,L]=myWDL;}else{[W,D,L]=deriveWDL(pts,games);}
+    const tr=document.createElement("tr");
+    tr.className=(t.you?"you ":"")+(i>=bottomFrom?"dimrow":"");
+    let marks="";
+    if(promoTo&&i<promoTo)marks=' <span class="promark">▲</span>';
+    if(i>=bottomFrom)marks=' <span class="relmark">▼</span>';
+    tr.innerHTML=`<td>${i+1}${marks}</td><td>${esc(t.name)}</td><td class="num">${W}</td><td class="num">${D}</td><td class="num">${L}</td><td class="num">${pts}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+/* ====================== CHAMPIONSHIP SEASON ====================== */
+function simChampionship(){
+  const st=teamStats();
+  /* 46-game curve, medium-hard: avg ~69 → playoff range, ~71.5+ → auto contention */
+  let pts=28+92/(1+Math.exp(-(st.teamAvg-69.5)/4));
+  const gates=[];
+  if(st.gk<60){pts-=5;gates.push("a Championship-level howler problem in goal");}
+  if(st.df<61){pts-=6;gates.push("a back four bullied at set pieces all season");}
+  if(st.mf<61){pts-=5;gates.push("a midfield overrun in second halves");}
+  if(st.attMax<68){pts-=5;gates.push("nobody to hit 15 goals");}
+  pts+=rnd(-4,4);
+  pts=Math.max(26,Math.min(112,Math.round(pts)));
+  const [W,D,L]=deriveWDL(pts,46);
+  const table=buildTable(CH_RIVALS,pts,4);
+  const pos=table.findIndex(t=>t.you)+1;
+  let playoff=null, promoted=pos<=2, route=pos===1?"champions":pos===2?"runnersup":null;
+  if(pos>=3&&pos<=6){
+    const winP=Math.min(.78,Math.max(.32,.38+(st.teamAvg-66)*.045));
+    const others=table.filter((t,i)=>!t.you&&i>=2&&i<=6).map(t=>t.name);
+    const semiOpp=others[0]||"Coventry City", finalOpp=others[1]||"West Brom";
+    const semiWin=Math.random()<winP;
+    const ties=[{label:"Semi-final v "+semiOpp,win:semiWin,score:semiWin?`${rnd(2,3)}–${rnd(0,1)} agg`:`${rnd(0,1)}–${rnd(2,3)} agg`}];
+    let finalWin=false;
+    if(semiWin){
+      finalWin=Math.random()<winP;
+      ties.push({label:"Final v "+finalOpp+" · Wembley",win:finalWin,score:finalWin?`${rnd(1,2)}–${rnd(0,1)}`:`${rnd(0,1)}–${rnd(1,2)}`});
+    }
+    playoff={ties,won:semiWin&&finalWin};
+    if(playoff.won){promoted=true;route="playoffs";}
+  }
+  const budget = route==="champions"?60:route==="runnersup"?50:route==="playoffs"?40:0;
+  S.champ={pts,W,D,L,pos,table,promoted,route,playoff,budget,gates,st};
+  renderChampResult();
+}
+function chSeasonScore(C){
+  let s=C.pts+(25-C.pos)*4;
+  if(C.promoted)s+=150;
+  if(C.playoff&&C.playoff.won)s+=30;
+  return s;
+}
+function renderChampResult(){
+  const C=S.champ;
+  show("scr-champ");
+  const K=S.career;
+  const stamp=$("c-stamp");
+  let copy;
+  if(C.route==="champions"){stamp.textContent="CHAMPIONS — PROMOTED";stamp.className="stamp elite";
+    copy=`${C.pts} points and the title. The board is delighted, the bus is open-top, and there's money in the kitty.`;}
+  else if(C.route==="runnersup"){stamp.textContent="PROMOTED";stamp.className="stamp safe";
+    copy=`Second on ${C.pts} points — automatic promotion, no Wembley nerves required.`;}
+  else if(C.playoff&&C.playoff.won){stamp.textContent="PROMOTED VIA PLAYOFFS";stamp.className="stamp safe";
+    copy=`${ordinal(C.pos)} in the table, but it only takes three good days in May. The richest game in football is yours.`;}
+  else if(C.playoff){stamp.textContent="PLAYOFF SECURED — THEN HEARTBREAK";stamp.className="stamp down";
+    copy=`${ordinal(C.pos)} place earned a playoff spot, but the lottery didn't pay out.${K?" The project continues — in the same league.":" Same league next year. Same heartbreak, probably."}`;}
+  else if(C.pos>=22){stamp.textContent="RELEGATED TO LEAGUE ONE";stamp.className="stamp down";
+    copy=`${ordinal(C.pos)} on ${C.pts} points. You were meant to be going up.${K?" The board has seen enough — you're sacked.":" The fans have made a banner, and it isn't friendly."}`;}
+  else{stamp.textContent="NO PROMOTION";stamp.className="stamp down";
+    copy=`${ordinal(C.pos)} on ${C.pts} points. Solid, forgettable, and absolutely not the Premier League.${K?"":" The project ends here."}`;}
+  $("c-copy").textContent=copy;
+  $("c-stats").innerHTML=`
+    <div class="stat"><div class="k">Championship finish</div><div class="v ${C.promoted?'':'red'}">${ordinal(C.pos)}</div></div>
+    <div class="stat"><div class="k">Points</div><div class="v white">${C.pts}</div></div>
+    <div class="stat"><div class="k">Record W-D-L</div><div class="v white">${C.W}-${C.D}-${C.L}</div></div>
+    ${C.promoted?`<div class="stat"><div class="k">Summer budget</div><div class="v">£${C.budget}m</div></div>`:""}`;
+  const pp=$("playoff");
+  if(C.playoff){
+    pp.style.display="";
+    $("playoff-ties").innerHTML=C.playoff.ties.map(t=>
+      `<div class="tie"><span>${esc(t.label)}</span><span class="res ${t.win?'w':'l'}">${t.win?'WON':'LOST'} ${t.score}</span></div>`).join("");
+  }else pp.style.display="none";
+  tableRows("c-tbl",C.table,C.pos-1,46,[C.W,C.D,C.L],21,2);
+
+  const act=$("c-actions"); act.innerHTML="";
+  $("c-post").style.display="none";
+
+  if(K){
+    /* career bookkeeping */
+    K.history.push({num:K.num,league:"CH",pos:C.pos,pts:C.pts,
+      note:C.route==="champions"?"Champions ▲":C.route==="runnersup"?"Promoted ▲":C.playoff&&C.playoff.won?"Playoff winners ▲":C.playoff?"Playoff defeat":C.pos>=22?"Relegated ▼ — sacked":"Missed out"});
+    K.total+=chSeasonScore(C);
+    if(C.pos>=22){K.over=true;K.sacked=true;renderCareerEnd();return;}
+    if(K.num>=K.len){K.over=true;renderCareerEnd();return;}
+    const nextBudget=C.promoted?C.budget:15;
+    const nextLeague=C.promoted?"PL":"CH";
+    const b=document.createElement("button");b.className="btn";
+    b.textContent=`Continue → summer window (Season ${K.num+1}/${K.len})`;
+    b.addEventListener("click",()=>continueCareer(nextBudget,nextLeague));
+    act.appendChild(b);
+    return;
+  }
+  /* single-run modes */
+  if(C.promoted){
+    S.budget=C.budget;
+    const b=document.createElement("button");b.className="btn";b.textContent="Open the transfer window →";
+    b.addEventListener("click",()=>{S.nextLeague="PL";openWindow(false);});act.appendChild(b);
+  }else{
+    const score=Math.round(chSeasonScore(C)*modeMult());
+    S.finalScore=score;
+    S.finalDetail=`CH ${ordinal(C.pos)} — no promotion`;
+    const note=document.createElement("div");note.className="stat";note.style.marginRight="18px";
+    note.innerHTML=`<div class="k">Final score (×${modeMult()})</div><div class="v">${score}</div>`;
+    act.appendChild(note);
+    const b=document.createElement("button");b.className="btn";b.textContent="Run it back";
+    b.addEventListener("click",()=>newGame(S.mode));act.appendChild(b);
+    const h=document.createElement("button");h.className="btn ghost";h.textContent="Change mode";
+    h.addEventListener("click",()=>show("scr-mode"));act.appendChild(h);
+    renderPostBox("c-post");
+  }
+}
+
+/* ====================== CAREER FLOW ====================== */
+function decaySquad(){
+  SLOTS.forEach(s=>S.squad[s.u].forEach(p=>{p.rating=Math.max(50,p.rating-1);}));
+}
+function continueCareer(budget,nextLeague){
+  const K=S.career;
+  K.num++;
+  K.league=nextLeague;
+  const aged = K.num>=3;
+  if(aged)decaySquad();
+  S.budget=budget;
+  S.nextLeague=nextLeague;
+  saveCareer();
+  openWindow(aged);
+}
+async function saveCareer(){
+  if(!S.career||!HAS_STORE)return;
+  const data={career:S.career, squad:S.squad, budget:S.budget, nextLeague:S.nextLeague, mode:S.mode};
+  await sset(SAVE_KEY,data,false);
+}
+async function loadCareerSave(){
+  if(!HAS_STORE)return null;
+  return await sget(SAVE_KEY,false);
+}
+function resumeCareer(data){
+  S={mode:"season", round:11, rerolls:0, used:new Set(), squad:data.squad, picks:[],
+     current:null, locked:false, champ:null, budget:data.budget, signings:0,
+     market:[], pending:null, posted:false, career:data.career};
+  S.nextLeague=data.nextLeague;
+  openWindow(data.career.num>=3);
+}
+function renderCareerEnd(){
+  const K=S.career;
+  sdel(SAVE_KEY);
+  show("scr-career");
+  const stamp=$("k-stamp");
+  const plSeasons=K.history.filter(h=>h.league==="PL").length;
+  let copy;
+  if(K.sacked){stamp.textContent="SACKED";stamp.className="stamp down";
+    copy=`Relegated towards League One in season ${K.num}. The project is over, the statement is short, and it "thanks you for your efforts".`;}
+  else if(K.bestPL===1){stamp.textContent="CHAMPIONS OF ENGLAND";stamp.className="stamp elite";
+    copy=`From a Championship draft to the Premier League title inside ${K.len} seasons. Statues take about a decade — start posing.`;}
+  else if(K.bestPL&&K.bestPL<=4){stamp.textContent="A TOP-FOUR PROJECT";stamp.className="stamp elite";
+    copy=`Best finish: ${ordinal(K.bestPL)}. Champions League football built from flip-board spins and shrewd windows.`;}
+  else if(K.bestPL&&K.bestPL<=10){stamp.textContent="ESTABLISHED";stamp.className="stamp safe";
+    copy=`Best finish: ${ordinal(K.bestPL)}. A proper Premier League club now — the kind that gets a documentary nobody finishes.`;}
+  else if(plSeasons>0){stamp.textContent="A FIGHTING CAREER";stamp.className="stamp safe";
+    copy=`${plSeasons} season${plSeasons===1?"":"s"} in the Premier League, best finish ${ordinal(K.bestPL)}. Every May was terrifying. You'd do it all again.`;}
+  else{stamp.textContent="NEVER MADE IT UP";stamp.className="stamp down";
+    copy=`${K.len} seasons, no promotion. The Championship is a swamp and it kept you.`;}
+  $("k-copy").textContent=copy;
+  $("k-stats").innerHTML=`
+    <div class="stat"><div class="k">Career length</div><div class="v white">${K.history.length} ssn${K.history.length===1?"":"s"}</div></div>
+    <div class="stat"><div class="k">Best PL finish</div><div class="v ${K.bestPL?"":"red"}">${K.bestPL?ordinal(K.bestPL):"—"}</div></div>
+    <div class="stat"><div class="k">PL seasons</div><div class="v white">${plSeasons}</div></div>
+    <div class="stat"><div class="k">Career score</div><div class="v">${K.total}</div></div>`;
+  const tb=$("k-tbl");tb.innerHTML="";
+  K.history.forEach(h=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${h.num}</td><td>${h.league==="PL"?"Premier League":'<span class="lg-ch">Championship</span>'}</td><td>${ordinal(h.pos)}</td><td class="num">${h.pts}</td><td>${esc(h.note)}</td>`;
+    tb.appendChild(tr);
+  });
+  S.finalScore=K.total;
+  S.finalDetail=`${K.history.length} ssns · best PL ${K.bestPL?ordinal(K.bestPL):"—"}`;
+  renderPostBox("k-post");
+}
+
+/* ====================== TRANSFER WINDOW ====================== */
+function openWindow(aged){
+  S.rerolls=S.mode==="reroll"?2:0;
+  S.signings=0; S.pending=null;
+  SLOTS.forEach(s=>S.squad[s.u].forEach(p=>p.newSign=false));
+  $("btn-refresh").style.display=S.mode==="reroll"?"":"none";
+  $("agewarn").style.display=aged?"":"none";
+  const K=S.career;
+  $("careerbox").style.display=K?"":"none";
+  if(K)$("careertag-w").textContent=`Ssn ${K.num}/${K.len} · ${S.nextLeague==="PL"?"Premier League":"Championship"}`;
+  $("window-copy").innerHTML = S.nextLeague==="PL"
+    ? `Summer window before a <b>Premier League</b> season. Each signing <b>replaces a player in the same unit</b> — up to five. What you don't spend goes back to the board.`
+    : `Summer window before another <b>Championship</b> push. The budget is thin — spend it where it hurts most.`;
+  $("btn-kickoff").textContent = S.nextLeague==="PL" ? "Start the PL season →" : "Start the Championship season →";
+  rollMarket();
+  show("scr-window");
+  renderWindow();
+}
+function rollMarket(){
+  const byU={GK:[],DF:[],MF:[],FW:[]};
+  MARKET_POOL.forEach((p,i)=>byU[p[1]].push(i));
+  const pickN=(arr,n)=>{const c=[...arr];const out=[];while(out.length<n&&c.length)out.push(c.splice(rnd(0,c.length-1),1)[0]);return out;};
+  let idxs=[...pickN(byU.GK,2),...pickN(byU.DF,4),...pickN(byU.MF,4),...pickN(byU.FW,4)];
+  S.market=idxs.map(i=>MARKET_POOL[i]);
+}
+function renderWindow(){
+  $("budget").textContent=S.budget;
+  $("signs").textContent=S.signings;
+  $("mkleft").textContent=S.rerolls;
+  $("btn-refresh").disabled=S.rerolls<=0;
+  const m=$("market"); m.innerHTML="";
+  S.market.forEach((p,i)=>{
+    const [name,pos,rating,fee]=p;
+    const owned=[...S.squad.GK,...S.squad.DF,...S.squad.MF,...S.squad.FW].some(x=>x.name===name);
+    const afford=fee<=S.budget&&S.signings<5&&!owned;
+    const card=document.createElement("div");
+    card.className="pcard"+(afford?"":" dis");
+    card.innerHTML=`<div class="row1"><div class="nm">${esc(name)}</div><div class="posb">${pos}</div></div>
+      ${ratHTML(rating)}
+      <div class="row1"><span class="fee">£${fee}m</span></div>
+      <div class="signrow"><button data-i="${i}" ${afford?"":"disabled"}>${owned?"In squad":S.signings>=5?"No slots":fee>S.budget?"Too rich":"Bid"}</button></div>`;
+    m.appendChild(card);
+  });
+  m.querySelectorAll("button[data-i]").forEach(b=>b.addEventListener("click",()=>startReplace(+b.dataset.i)));
+  renderSquad("w-units",true);
+  renderReplace();
+}
+function startReplace(i){S.pending=i;renderReplace();$("replace").scrollIntoView({behavior:reduceMotion()?"auto":"smooth",block:"center"});}
+function renderReplace(){
+  const box=$("replace");
+  if(S.pending===null){box.style.display="none";return;}
+  const [name,pos,rating,fee]=S.market[S.pending];
+  box.style.display="";
+  const opts=S.squad[pos].map((pl,j)=>
+    `<button data-j="${j}">${esc(pl.name)}${S.mode!=="scout"?" ("+pl.rating+")":""} — ${esc(pl.club)} ${esc(pl.season)}</button>`).join("");
+  box.innerHTML=`<div class="k">Signing ${esc(name)} (£${fee}m) — who makes way in ${ULAB[pos]}?</div>
+    <div class="opts">${opts}<button data-j="-1" style="border-color:var(--red);color:var(--red)">Cancel bid</button></div>`;
+  box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    const j=+b.dataset.j;
+    if(j>=0){
+      S.squad[pos][j]={name,rating,unit:pos,club:"New signing",season:"£"+fee+"m",newSign:true};
+      S.budget-=fee; S.signings++;
+      if(S.career)saveCareer();
+    }
+    S.pending=null; renderWindow();
+  }));
+}
+function refreshMarket(){
+  if(S.rerolls<=0)return;
+  S.rerolls--; S.pending=null;
+  rollMarket(); renderWindow();
+}
+function kickoff(){
+  if(S.nextLeague==="CH")simChampionship();
+  else simPL();
+}
+
+/* ====================== PREMIER LEAGUE SEASON ====================== */
+function simPL(){
+  const st=teamStats();
+  /* 38-game curve, medium-hard: ~74 avg ≈ survival scrap, 76+ comfortable */
+  let pts=5+86/(1+Math.exp(-(st.teamAvg-75.5)/4.6));
+  const gates=[];
+  if(st.gk<64){pts-=4;gates.push("a keeper the league's forwards queued up to face");}
+  if(st.df<66){pts-=5;gates.push("a defence that conceded first far too often");}
+  if(st.mf<65){pts-=4;gates.push("a midfield that couldn't hold a lead");}
+  if(st.attMax<72){pts-=4;gates.push("no striker clinical enough at this level");}
+  pts+=rnd(-3,3);
+  pts=Math.max(9,Math.min(95,Math.round(pts)));
+  const [W,D,L]=deriveWDL(pts,38);
+  const table=buildTable(PL_RIVALS,pts,4);
+  const pos=table.findIndex(t=>t.you)+1;
+  const relegated=pos>=18;
+  const plScore=(20-pos)*40+pts*2;
+  renderPLResult({pts,W,D,L,pos,table,relegated,gates,st,plScore});
+}
+function renderPLResult(R){
+  show("scr-result");
+  const K=S.career;
+  const stamp=$("stamp");
+  let copy;
+  if(R.pos===1){stamp.textContent="CHAMPIONS OF ENGLAND";stamp.className="stamp elite";
+    copy="Championship draft to Premier League title. They'll write books. Bad ones, but books.";}
+  else if(R.pos<=4){stamp.textContent="TOP FOUR";stamp.className="stamp elite";
+    copy=`${ordinal(R.pos)} place — Champions League nights are coming to a ground that hosted Rotherham not long ago.`;}
+  else if(R.pos<=10){stamp.textContent="ESTABLISHED";stamp.className="stamp safe";
+    copy=`${ordinal(R.pos)} place. Not a survival scrap — an actual Premier League club. The signings earned their fees.`;}
+  else if(!R.relegated){stamp.textContent="SURVIVED";stamp.className="stamp safe";
+    copy=`${ordinal(R.pos)} on ${R.pts} points. Ugly in March, terrifying in April, safe in May. That was the whole job.`;}
+  else{stamp.textContent="RELEGATED";stamp.className="stamp down";
+    copy=`${ordinal(R.pos)} place, ${R.pts} points. Straight back down.${K?" The board keeps faith — for now. Parachute money next summer.":" At least you know the league."}`;}
+  $("verdict-copy").textContent=copy;
+
+  let statHTML=`
+    <div class="stat"><div class="k">PL finish</div><div class="v ${R.relegated?'red':''}">${ordinal(R.pos)}</div></div>
+    <div class="stat"><div class="k">Points</div><div class="v ${R.relegated?'red':''}">${R.pts}</div></div>
+    <div class="stat"><div class="k">Record W-D-L</div><div class="v white">${R.W}-${R.D}-${R.L}</div></div>`;
+  if(K){
+    statHTML+=`<div class="stat"><div class="k">Season score</div><div class="v white">${R.plScore}</div></div>
+      <div class="stat"><div class="k">Career score</div><div class="v">${K.total+R.plScore}</div></div>`;
+  }else{
+    const s1=Math.round(chSeasonScore(S.champ)*modeMult());
+    const s2=Math.round(R.plScore*modeMult());
+    statHTML+=`<div class="stat"><div class="k">Season 1 score</div><div class="v white">${s1}</div></div>
+      <div class="stat"><div class="k">Season 2 score</div><div class="v white">${s2}</div></div>
+      <div class="stat"><div class="k">Total score</div><div class="v">${s1+s2}</div></div>`;
+    S.finalScore=s1+s2;
+    S.finalDetail=`PL ${ordinal(R.pos)} · ${R.pts} pts`;
+  }
+  $("statline").innerHTML=statHTML;
+  tableRows("tbl",R.table,R.pos-1,38,[R.W,R.D,R.L],17,0);
+
+  const all=[...S.squad.GK,...S.squad.DF,...S.squad.MF,...S.squad.FW];
+  const best=[...all].sort((a,b)=>b.rating-a.rating)[0];
+  const worst=[...all].sort((a,b)=>a.rating-b.rating)[0];
+  const units=[["Goalkeeping",R.st.gk],["Defence",R.st.df],["Midfield",R.st.mf],["Attack",R.st.fw]].sort((a,b)=>a[1]-b[1]);
+  $("notes").innerHTML=`
+    <div class="note"><div class="k">Player of the season</div><div class="v">${esc(best.name)} (${best.rating})${best.newSign?" — money well spent":" — a draft-day bargain"}</div></div>
+    <div class="note"><div class="k">Weakest unit</div><div class="v">${units[0][0]} (avg ${units[0][1].toFixed(1)})${R.gates.length?` — the sim punished ${R.gates[0]}`:""}</div></div>
+    <div class="note"><div class="k">Window report</div><div class="v">${S.signings} signing${S.signings===1?"":"s"} made, £${S.budget}m handed back to the board.</div></div>
+    <div class="note"><div class="k">Squad's weak link</div><div class="v">${esc(worst.name)} (${worst.rating}) gave everything, but this level is unforgiving.</div></div>`;
+
+  const act=$("r-actions");act.innerHTML="";
+  $("r-post").style.display="none";
+  if(K){
+    K.history.push({num:K.num,league:"PL",pos:R.pos,pts:R.pts,
+      note:R.pos===1?"CHAMPIONS":R.pos<=4?"Top four":R.relegated?"Relegated ▼":"Survived"});
+    K.total+=R.plScore;
+    K.bestPL=K.bestPL?Math.min(K.bestPL,R.pos):R.pos;
+    if(K.num>=K.len){K.over=true;
+      const b=document.createElement("button");b.className="btn";b.textContent="End of career →";
+      b.addEventListener("click",renderCareerEnd);act.appendChild(b);
+    }else{
+      const nextLeague=R.relegated?"CH":"PL";
+      /* TV money scales with finish; top four adds Champions League cash; relegation pays a parachute */
+      const budget=R.relegated?30:(30+(20-R.pos)*4+(R.pos<=4?20:0));
+      const b=document.createElement("button");b.className="btn";
+      b.textContent=`Continue → summer window (Season ${K.num+1}/${K.len}, £${budget}m)`;
+      b.addEventListener("click",()=>continueCareer(budget,nextLeague));
+      act.appendChild(b);
+    }
+  }else{
+    const b=document.createElement("button");b.className="btn";b.textContent="Run it back";
+    b.addEventListener("click",()=>newGame(S.mode));act.appendChild(b);
+    const h=document.createElement("button");h.className="btn ghost";h.textContent="Change mode";
+    h.addEventListener("click",()=>show("scr-mode"));act.appendChild(h);
+    renderPostBox("r-post");
+  }
+}
+
+/* ====================== LEADERBOARD ====================== */
+function renderPostBox(boxId){
+  const box=$(boxId);
+  box.style.display="";
+  if(S.posted){box.innerHTML=`<div class="k">Leaderboard</div><div class="msg">Score posted. See where you stand on the 🏆 Leaderboard.</div>`;return;}
+  box.innerHTML=`<div class="k">Post score to the global leaderboard — ${esc(MODE_NAMES[S.mode])}</div>
+    <div class="row"><input id="${boxId}-name" maxlength="14" placeholder="MANAGER NAME"><button class="btn" id="${boxId}-go">Post ${S.finalScore}</button></div>
+    <div class="msg">Posted names and scores are public to everyone who plays. Only your best score per mode counts.</div>`;
+  $(boxId+"-go").addEventListener("click",async()=>{
+    const raw=$(boxId+"-name").value||"";
+    const name=raw.replace(/[<>&"']/g,"").trim().toUpperCase().slice(0,14)||"ANON";
+    const btn=$(boxId+"-go");
+    btn.disabled=true;btn.textContent="Posting…";
+    try{
+      await pfLogin();
+      await pfSetName(name);
+      /* only post personal bests so a Max-aggregated board stays honest even if misconfigured */
+      const bestKey="std-best-"+S.mode;
+      const prev=(await sget(bestKey))||0;
+      if(S.finalScore>prev){await pfPostScore(S.mode,S.finalScore);await sset(bestKey,S.finalScore);}
+      S.posted=true;renderPostBox(boxId);
+    }catch(e){
+      btn.disabled=false;btn.textContent="Retry post";
+      box.querySelector(".msg").textContent="Couldn't reach the leaderboard ("+e.message+"). Check your connection and try again.";
+    }
+  });
+}
+let lbMode="classic", lbPrev="scr-mode";
+async function openBoard(){
+  lbPrev=document.querySelector(".screen.on")?.id||"scr-mode";
+  show("scr-board");
+  renderBoardTab();
+}
+async function renderBoardTab(){
+  document.querySelectorAll("#lb-tabs button").forEach(b=>b.classList.toggle("act",b.dataset.m===lbMode));
+  const tb=$("lb-tbl");
+  tb.innerHTML=`<tr><td colspan="3" style="color:var(--chalk-dim)">Loading…</td></tr>`;
+  try{
+    await pfLogin();
+    const list=await pfBoard(lbMode);
+    tb.innerHTML="";
+    if(!list.length){
+      tb.innerHTML=`<tr><td colspan="3" style="color:var(--chalk-dim)">No scores posted yet in ${esc(MODE_NAMES[lbMode])} — be the first.</td></tr>`;
+    }else{
+      list.forEach(e=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`<td>${e.Position+1}</td><td>${esc(e.DisplayName||"ANON")}</td><td class="num">${Number(e.StatValue)||0}</td>`;
+        tb.appendChild(tr);
+      });
+    }
+    $("lb-note").textContent="Global leaderboard — best score per manager, per mode. Names and scores are public.";
+  }catch(e){
+    tb.innerHTML=`<tr><td colspan="3" style="color:var(--chalk-dim)">Couldn't load the leaderboard (${esc(e.message)}).</td></tr>`;
+    $("lb-note").textContent="";
+  }
+}
+
+/* ====================== BOOT / RESUME ====================== */
+async function checkResume(){
+  const data=await loadCareerSave();
+  const slot=$("resume");
+  if(!data||!data.career||data.career.over){slot.innerHTML="";return;}
+  const K=data.career;
+  slot.innerHTML=`<button class="btn" id="btn-resume">⏯ Resume career — Season ${K.num}/${K.len}, ${data.nextLeague==="PL"?"Premier League":"Championship"}</button>`;
+  $("btn-resume").addEventListener("click",()=>resumeCareer(data));
+}
+
+/* ====================== WIRES ====================== */
+$("btn-classic").addEventListener("click",()=>newGame("classic"));
+$("btn-scout").addEventListener("click",()=>newGame("scout"));
+$("btn-reroll").addEventListener("click",()=>newGame("reroll"));
+$("btn-season").addEventListener("click",()=>show("scr-len"));
+$("btn-len-back").addEventListener("click",()=>show("scr-mode"));
+document.querySelectorAll("#scr-len .mode-card").forEach(b=>
+  b.addEventListener("click",()=>newGame("season",+b.dataset.len)));
+$("btn-respin").addEventListener("click",()=>spin(true));
+$("btn-refresh").addEventListener("click",refreshMarket);
+$("btn-kickoff").addEventListener("click",kickoff);
+$("btn-board").addEventListener("click",openBoard);
+$("btn-board-back").addEventListener("click",()=>show(lbPrev==="scr-board"?"scr-mode":lbPrev));
+document.querySelectorAll("#lb-tabs button").forEach(b=>
+  b.addEventListener("click",()=>{lbMode=b.dataset.m;renderBoardTab();}));
+$("btn-k-again").addEventListener("click",()=>show("scr-len"));
+$("btn-k-home").addEventListener("click",()=>show("scr-mode"));
+checkResume();
+</script>
+</body>
+</html>
